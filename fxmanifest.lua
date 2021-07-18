@@ -6,6 +6,7 @@ version '1.0.0'
 
 shared_scripts { 
 	'@qb-core/import.lua',
+	'@qb-core/shared.lua',
 	'config.lua'
 }
 

@@ -1,6 +1,58 @@
 Config = {}
 
 Config.Products = {
+    ["darkshop_1"]={
+        [1] = {
+            name = "tunerlaptop",
+            price = 15000,
+            amount = 5,
+            info = {},
+            type = "item",
+            slot = 1,
+        },
+        [2] = {
+            name = "electronickit",
+            price = 15000,
+            amount = 5,
+            info = {},
+            type = "item",
+            slot = 2,
+        },
+        [3] = {
+            name = "security_card_02",
+            price = 50000,
+            amount = 5,
+            info = {},
+            type = "item",
+            slot = 3,
+        },
+    },
+    ["darkshop_2"]={
+        [1] = {
+            name = "lockpick",
+            price = 100,
+            amount = 100,
+            info = {},
+            type = "item",
+            slot = 1,
+        },
+        [2] = {
+            name = "trojan_usb",
+            price = 2000,
+            amount = 5,
+            info = {},
+            type = "item",
+            slot = 2,
+        },
+        [3] = {
+            name = "security_card_01",
+            price = 25000,
+            amount = 5,
+            info = {},
+            type = "item",
+            slot = 3,
+        },
+    },
     ["normal"] = {
         [1] = {
             name = "tosti",
@@ -403,24 +455,12 @@ Config.Locations = {
         ["type"] = "normal",
         ["coords"] = {
             [1] = {
-                ["x"] = -633.72,
-                ["y"] = 236.15,
+                ["x"] = -628.72,
+                ["y"] = 239.15,
                 ["z"] = 81.88,
             },
         },
         ["products"] = Config.Products["coffeeplace"],
-    },
-    ["casino"] = {
-        ["label"] = "Diamond Casino",
-        ["type"] = "normal",
-        ["coords"] = {
-            [1] = {
-                ["x"] = 948.71,
-                ["y"] = 33.95,
-                ["z"] = 71.84,
-            },
-        },
-        ["products"] = Config.Products["casino"],
     },
     ["ltdgasoline"] = {
         ["label"] = "LTD Gasoline",
@@ -737,7 +777,7 @@ Config.Locations = {
         },
         ["products"] = Config.Products["normal"],
     },
-    ["247supermarket9"] = {
+    ["247supermarket10"] = {
         ["label"] = "24/7 Supermarket",
         ["type"] = "normal",
         ["coords"] = {
@@ -755,16 +795,16 @@ Config.Locations = {
         ["products"] = Config.Products["normal"],
     },
     ["hardware"] = {
-        ["label"] = "Hardware Store",
+        ["label"] = "Life Invaders",
         ["type"] = "hardware",
         ["coords"] = {
             [1] = {
-                ["x"] = 45.55,
-                ["y"] = -1749.01,
-                ["z"] = 29.6,
+                ["x"] = -1081.99,
+                ["y"] = -247.11,
+                ["z"] = 37.25,
             }
         },
-        ["products"] = Config.Products["hardware"],
+        ["products"] = Config.Products["Lifeinvaders"],
     },
     ["hardware2"] = {
         ["label"] = "Hardware Store",
@@ -927,8 +967,8 @@ Config.Locations = {
         ["type"] = "leisure",
         ["coords"] = {
             [1] = {
-                ["x"] = -1508.774, 
-                ["y"] = 1509.015, 
+                ["x"] = -1505.774, 
+                ["y"] = 1512.015, 
                 ["z"] = 115.2903
             }
         },
@@ -939,11 +979,43 @@ Config.Locations = {
         ["type"] = "leisure",
         ["coords"] = {
             [1] = {
-                ["x"] = -31.18, 
-                ["y"] = -1397.537, 
-                ["z"] = 29.50
+                ["x"] = -39.18, 
+                ["y"] = -1388.537, 
+                ["z"] = 30.50
             }
         },
-        ["products"] = Config.Products["mustapha"],
-    },    
+        ["products"] = Config.Products["mustapha"],   
+    },
+    ["shon"] = {
+        ["label"] = "shon",
+        ["darkshop"] = true,
+        ["type"] = "darkshop",
+        ["coords"] = {
+            [1] = {
+                ["x"] = -167.54, 
+                ["y"] = 1127.96, 
+                ["z"] = 45.89
+            }
+        },
+        ["products"] = Config.Products["darkshop_1"]
+    },
+    ["julie"] = {
+        ["label"] = "julie",
+        ["darkshop"] = true,
+        ["type"] = "darkshop",
+        ["ped"] = {
+            ["spawnPosition"] = vector3(16.86,3373.29,49.92),
+            ["id"] = "05d12b57-f1f5-4cbb-b7a0-9eec052e3b6a", 
+            ["model"] = "a_f_y_hippie_01"
+        },
+        
+        ["coords"] = {
+            [1] = {
+                ["x"] = 16.86, 
+                ["y"] = 3373.39, 
+                ["z"] = 20.92
+            }
+        },
+        ["products"] = Config.Products["darkshop_2"]
+    },       
 }

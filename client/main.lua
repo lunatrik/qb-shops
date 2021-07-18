@@ -1,5 +1,5 @@
 function DrawText3Ds(x, y, z, text)
-	SetTextScale(0.35, 0.35)
+    SetTextScale(0.35, 0.35)
     SetTextFont(4)
     SetTextProportional(1)
     SetTextColour(255, 255, 255, 215)
@@ -21,19 +21,19 @@ for i = 65,  90 do table.insert(StringCharset, string.char(i)) end
 for i = 97, 122 do table.insert(StringCharset, string.char(i)) end
 
 RandomInt = function(length)
-	if length > 0 then
-		return RandomInt(length-1) .. NumberCharset[math.random(1, #NumberCharset)]
-	else
-		return ''
-	end
+    if length > 0 then
+        return RandomInt(length-1) .. NumberCharset[math.random(1, #NumberCharset)]
+    else
+        return ''
+    end
 end
 
 RandomStr = function(length)
-	if length > 0 then
-		return RandomStr(length-1) .. StringCharset[math.random(1, #StringCharset)]
-	else
-		return ''
-	end
+    if length > 0 then
+        return RandomStr(length-1) .. StringCharset[math.random(1, #StringCharset)]
+    else
+        return ''
+    end
 end
 
 function SetWeaponSeries()
@@ -43,24 +43,34 @@ function SetWeaponSeries()
         end
     end
 end
-
+ 
 Citizen.CreateThread(function()
     while true do
         local InRange = false
         local PlayerPed = PlayerPedId()
         local PlayerPos = GetEntityCoords(PlayerPed)
-
+        
         for shop, _ in pairs(Config.Locations) do
             local position = Config.Locations[shop]["coords"]
             for _, loc in pairs(position) do
                 local dist = #(PlayerPos - vector3(loc["x"], loc["y"], loc["z"]))
-                if dist < 10 then
+                if Config.Locations[shop]["ped"] ~= nil and dist < 100 then
+                    QBShared.SpawnPed(Config.Locations[shop]["ped"]["id"], Config.Locations[shop]["ped"]["model"], Config.Locations[shop]["ped"]["spawnPosition"], 180.0, "female")
+                end
+                if dist < 100 and dist > 10 and Config.Locations[shop]["ped"] ~= nil then
+                    QBShared.SpawnPed(Config.Locations[shop]["ped"]["id"], Config.Locations[shop]["ped"]["model"], Config.Locations[shop]["ped"]["spawnPosition"], 180.0, "female")
+                elseif dist < 10 then
                     InRange = true
                     DrawMarker(2, loc["x"], loc["y"], loc["z"], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.2, 0.1, 255, 255, 255, 155, 0, 0, 0, 1, 0, 0, 0)
                     if dist < 1 then
-                        DrawText3Ds(loc["x"], loc["y"], loc["z"] + 0.15, '~g~E~w~ - Shop')
+                        if Config.Locations[shop]["darkshop"] == false then
+                            DrawText3Ds(loc["x"], loc["y"], loc["z"] + 0.15, '~g~E~w~ - Shop')
+                        else
+                            DrawText3Ds(loc["x"], loc["y"], loc["z"] + 0.15, '~g~E~w~')
+                        end
+                        
                         if IsControlJustPressed(0, 38) then -- E
-			    SetWeaponSeries()
+                            SetWeaponSeries()
                             local ShopItems = {}
                             ShopItems.label = Config.Locations[shop]["label"]
                             ShopItems.items = Config.Locations[shop]["products"]
@@ -68,10 +78,14 @@ Citizen.CreateThread(function()
                             TriggerServerEvent("inventory:server:OpenInventory", "shop", "Itemshop_"..shop, ShopItems)
                         end
                     end
-                end
+                elseif dist > 100 then
+                    if Config.Locations[shop]["ped"] ~= nil then
+                        QBShared.SpawnPed(Config.Locations[shop]["ped"]["id"], Config.Locations[shop]["ped"]["model"], Config.Locations[shop]["ped"]["spawnPosition"], 180.0, "female")
+                    end
+                end 
             end
         end
-
+        
         if not InRange then
             Citizen.Wait(5000)
         end
@@ -100,43 +114,44 @@ end)
 
 Citizen.CreateThread(function()
     for store,_ in pairs(Config.Locations) do
-        StoreBlip = AddBlipForCoord(Config.Locations[store]["coords"][1]["x"], Config.Locations[store]["coords"][1]["y"], Config.Locations[store]["coords"][1]["z"])
-        SetBlipColour(StoreBlip, 0)
-
-        if Config.Locations[store]["products"] == Config.Products["normal"] then
-            SetBlipSprite(StoreBlip, 52)
-            SetBlipScale(StoreBlip, 0.6)
-        elseif Config.Locations[store]["products"] == Config.Products["coffeeplace"] then
-            SetBlipSprite(StoreBlip, 52)
-            SetBlipScale(StoreBlip, 0.6)
-        elseif Config.Locations[store]["products"] == Config.Products["gearshop"] then
-            SetBlipSprite(StoreBlip, 52)
-            SetBlipScale(StoreBlip, 0.6)
-        elseif Config.Locations[store]["products"] == Config.Products["hardware"] then
-            SetBlipSprite(StoreBlip, 402)
-            SetBlipScale(StoreBlip, 0.8)
-        elseif Config.Locations[store]["products"] == Config.Products["weapons"] then
-            SetBlipSprite(StoreBlip, 110)
-            SetBlipScale(StoreBlip, 0.85)
-        elseif Config.Locations[store]["products"] == Config.Products["leisureshop"] then
-            SetBlipSprite(StoreBlip, 52)
-            SetBlipScale(StoreBlip, 0.6)
-            SetBlipColour(StoreBlip, 3)           
-        elseif Config.Locations[store]["products"] == Config.Products["mustapha"] then
-            SetBlipSprite(StoreBlip, 225)
-            SetBlipScale(StoreBlip, 0.6)
-            SetBlipColour(StoreBlip, 3)              
-        elseif Config.Locations[store]["products"] == Config.Products["coffeeshop"] then
-            SetBlipSprite(StoreBlip, 140)
-            SetBlipScale(StoreBlip, 0.55)
+        if Config.Locations[store]["darkshop"] == nil or Config.Locations[store]["darkshop"] == false then
+            StoreBlip = AddBlipForCoord(Config.Locations[store]["coords"][1]["x"], Config.Locations[store]["coords"][1]["y"], Config.Locations[store]["coords"][1]["z"])
+            SetBlipColour(StoreBlip, 0)
+            
+            if Config.Locations[store]["products"] == Config.Products["normal"] then
+                SetBlipSprite(StoreBlip, 52)
+                SetBlipScale(StoreBlip, 0.6)
+            elseif Config.Locations[store]["products"] == Config.Products["coffeeplace"] then
+                SetBlipSprite(StoreBlip, 52)
+                SetBlipScale(StoreBlip, 0.6)
+            elseif Config.Locations[store]["products"] == Config.Products["gearshop"] then
+                SetBlipSprite(StoreBlip, 52)
+                SetBlipScale(StoreBlip, 0.6)
+            elseif Config.Locations[store]["products"] == Config.Products["hardware"] then
+                SetBlipSprite(StoreBlip, 402)
+                SetBlipScale(StoreBlip, 0.8)
+            elseif Config.Locations[store]["products"] == Config.Products["weapons"] then
+                SetBlipSprite(StoreBlip, 110)
+                SetBlipScale(StoreBlip, 0.85)
+            elseif Config.Locations[store]["products"] == Config.Products["leisureshop"] then
+                SetBlipSprite(StoreBlip, 52)
+                SetBlipScale(StoreBlip, 0.6)
+                SetBlipColour(StoreBlip, 3)           
+            elseif Config.Locations[store]["products"] == Config.Products["mustapha"] then
+                SetBlipSprite(StoreBlip, 225)
+                SetBlipScale(StoreBlip, 0.6)
+                SetBlipColour(StoreBlip, 3)              
+            elseif Config.Locations[store]["products"] == Config.Products["coffeeshop"] then
+                SetBlipSprite(StoreBlip, 140)
+                SetBlipScale(StoreBlip, 0.55)
+            end
+            SetBlipDisplay(StoreBlip, 4)
+            SetBlipAsShortRange(StoreBlip, true)
+            
+            
+            BeginTextCommandSetBlipName("STRING")
+            AddTextComponentSubstringPlayerName(Config.Locations[store]["label"])
+            EndTextCommandSetBlipName(StoreBlip)
         end
-
-        SetBlipDisplay(StoreBlip, 4)
-        SetBlipAsShortRange(StoreBlip, true)
-    
-
-        BeginTextCommandSetBlipName("STRING")
-        AddTextComponentSubstringPlayerName(Config.Locations[store]["label"])
-        EndTextCommandSetBlipName(StoreBlip)
     end
 end)
